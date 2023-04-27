@@ -11,6 +11,9 @@ import {
 } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { environment } from '../environments/environment';
+const environmentConfig: any = environment.logger;
 
 @NgModule({
   declarations: [AppComponent, SnackbarComponent],
@@ -21,6 +24,11 @@ import { MatIconModule } from '@angular/material/icon';
     MatSnackBarModule,
     MatButtonModule,
     MatIconModule,
+    LoggerModule.forRoot({
+      level: NgxLoggerLevel[environmentConfig.level],
+      serverLogLevel: NgxLoggerLevel[environmentConfig.serverLevel],
+      serverLoggingUrl: environmentConfig.serverUrl,
+    } as any),
   ],
   providers: [
     {
@@ -28,6 +36,7 @@ import { MatIconModule } from '@angular/material/icon';
       useValue: {
         horizontalPosition: 'center',
         verticalPosition: 'top',
+        duration: 3000,
       },
     },
   ],

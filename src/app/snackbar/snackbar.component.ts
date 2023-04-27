@@ -26,4 +26,7 @@ export class SnackbarComponent {
   onDismiss() {
     this.snackBarRef.dismiss();
   }
+  onAction() {
+    this.snackBarRef.dismissWithAction();
+  }
 }

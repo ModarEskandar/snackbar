@@ -1,3 +1,4 @@
+import { NGXLogger } from 'ngx-logger';
 import { Injectable } from '@angular/core';
 import {
   MatSnackBar,
@@ -10,9 +11,9 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
   providedIn: 'root',
 })
 export class MFCsnackbarService {
-  constructor(private _snackBar: MatSnackBar) {}
+  constructor(private _snackBar: MatSnackBar, private logger: NGXLogger) {}
 
-  openSnackBar(data: any, options: MatSnackBarConfig<any> | undefined) {
+  private openSnackBar(data: any, options: MatSnackBarConfig<any> | undefined) {
     console.log(options);
     return this._snackBar.openFromComponent(SnackbarComponent, {
       ...options,
@@ -27,66 +28,75 @@ export class MFCsnackbarService {
       snackBarType: 'info',
     };
     let snackBarRef = this.openSnackBar(data, {
-      horizontalPosition: 'left',
+      horizontalPosition: 'end',
       verticalPosition: 'top',
     });
-    snackBarRef.afterDismissed().subscribe((res) => {
-      console.log('The snackbar was dismissed', res);
+    snackBarRef.afterDismissed().subscribe(() => {
+      this.logger.info('info snackbar was Dismissed!');
+      setTimeout(() => this.success(data), 1000);
     });
 
     snackBarRef.onAction().subscribe(() => {
-      console.log('The snackbar action was triggered!');
+      this.logger.info('info snackbar action was triggered!');
     });
   }
+
   success(data: any) {
     data = {
       ...data,
       snackBarType: 'success',
     };
     let snackBarRef = this.openSnackBar(data, {
-      horizontalPosition: 'right',
+      horizontalPosition: 'start',
       verticalPosition: 'top',
     });
-    snackBarRef.afterDismissed().subscribe((res) => {
-      console.log('The snackbar was dismissed', res);
+    snackBarRef.afterDismissed().subscribe(() => {
+      this.logger.trace('success snackbar was Dismissed!');
+      setTimeout(() => this.warning(data), 1000);
     });
 
     snackBarRef.onAction().subscribe(() => {
-      console.log('The snackbar action was triggered!');
+      this.logger.trace('success snackbar action was triggered!');
     });
   }
+
   warning(data: any) {
     data = {
       ...data,
       snackBarType: 'warning',
     };
     let snackBarRef = this.openSnackBar(data, {
-      horizontalPosition: 'right',
+      horizontalPosition: 'start',
       verticalPosition: 'bottom',
     });
-    snackBarRef.afterDismissed().subscribe((res) => {
-      console.log('The snackbar was dismissed', res);
+    snackBarRef.afterDismissed().subscribe(() => {
+      setTimeout(() => this.error(data), 1000);
+
+      this.logger.warn('warning snackbar was Dismissed!');
     });
 
     snackBarRef.onAction().subscribe(() => {
-      console.log('The snackbar action was triggered!');
+      this.logger.warn('warning snackbar action was triggered!');
     });
   }
+
   error(data: any) {
     data = {
       ...data,
       snackBarType: 'error',
     };
     let snackBarRef = this.openSnackBar(data, {
-      horizontalPosition: 'left',
+      horizontalPosition: 'end',
       verticalPosition: 'bottom',
     });
-    snackBarRef.afterDismissed().subscribe((res) => {
-      console.log('The snackbar was dismissed', res);
+    snackBarRef.afterDismissed().subscribe(() => {
+      setTimeout(() => this.info(data), 1000);
+
+      this.logger.error('error snackbar was Dismissed!');
     });
 
     snackBarRef.onAction().subscribe(() => {
-      console.log('The snackbar action was triggered!');
+      this.logger.error('error snackbar action was triggered!');
     });
   }
 }

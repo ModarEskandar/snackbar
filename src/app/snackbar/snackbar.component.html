@@ -4,12 +4,22 @@
       <mat-icon fontIcon="{{ snackBarTypeIcon[data.snackBarType] }}"></mat-icon>
     </button>
   </div>
-  <h1>{{ data.snackBarType | uppercase }}</h1>
+  <h1 matSnackBarLabel>{{ data.snackBarType | uppercase }}</h1>
   <div>
-    <p>{{ data.message }} &nbsp; in &nbsp;{{ date | date : "short" }}</p>
+    <p>
+      {{ data.snackBarType + " at " + (date | date : "short") + ": "
+      }}{{ data.message }}
+    </p>
   </div>
-  <div>
-    <button mat-raised-button (click)="onDismiss()">{{ data.action }}</button>
-    <button mat-raised-button>Ok</button>
+  <div matSnackBarActions>
+    <button mat-raised-button (click)="onDismiss()">Dismiss</button>
+    <button
+      mat-raised-button
+      matSnackBarAction
+      *ngIf="data.action"
+      (click)="onAction()"
+    >
+      {{ data.action }}
+    </button>
   </div>
 </div>
